@@ -1,8 +1,8 @@
 package com.example.scam_machine.service;
 
-import com.example.scam_machine.models.Player;
 import com.example.scam_machine.models.Symbol;
 import com.example.scam_machine.repository.PlayerRepository;
+import com.example.scam_machine.repository.SlotsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -14,21 +14,18 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class SlotMachineService {
     private final PlayerRepository playerRepository;
-    private final List<Symbol> slotsLine = List.of(
-            new Symbol("lemon", 1),
-            new Symbol("seven", 2),
-            new Symbol("strawberry", 3)
-    );
+    private final SlotsRepository slotsRepository;
 
     // Spin
     public List<Symbol> spin(UserDetails player) {
         var playerDb = playerRepository.findByUsername(player.getUsername());
+        var slots = slotsRepository.getReferenceById(1L).getSymbolList();
 
         Random random = new Random();
         List<Symbol> spinLine = List.of(
-                slotsLine.get(random.nextInt(2) + 1),
-                slotsLine.get(random.nextInt(2) + 1),
-                slotsLine.get(random.nextInt(2) + 1)
+                slots.get(random.nextInt(5) + 1),
+                slots.get(random.nextInt(5) + 1),
+                slots.get(random.nextInt(5) + 1)
         );
 
         if (spinLine.stream().allMatch(m -> m.equals(spinLine.get(0)))) {
