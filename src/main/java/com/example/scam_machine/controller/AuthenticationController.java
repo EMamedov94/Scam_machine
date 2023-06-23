@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,24 +18,40 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public ResponseEntity<Player> loginPlayer(@RequestBody Player player) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
+    public ResponseEntity<Object> loginPlayer(@RequestBody Player player,
+                                              BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Validation error");
+        }
+        if (!authenticationService.authenticate(player)) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Wrong username or password");
+        }
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .headers(headers)
+                .headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_JSON))
                 .body(authenticationService.loginPlayer(player));
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<Object> registrationNewPlayer(@RequestBody Player player) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
+    public ResponseEntity<Object> registrationNewPlayer(@RequestBody Player player,
+                                                        BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Validation error");
+        }
+        if (authenticationService.isUsernameExist(player.getUsername())) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Username already exist");
+        }
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .headers(headers)
+                .headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_JSON))
                 .body(authenticationService.registrationPlayer(player));
     }
 }

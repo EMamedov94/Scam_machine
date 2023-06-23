@@ -38,8 +38,22 @@ public class AuthenticationService {
                 .username(player.getUsername())
                 .password(passwordEncoder.encode(player.getPassword()))
                 .role(RoleEnum.ROLE_USER)
-                .balance(0D)
+                .balance(30D)
                 .build();
         return playerRepository.save(newPlayer);
+    }
+
+    // Check username or password
+    public boolean authenticate(Player player) {
+        var playerDb = playerRepository.findByUsername(player.getUsername());
+        if (playerDb == null) {
+            return false;
+        }
+        return passwordEncoder.matches(player.getPassword(), playerDb.getPassword());
+    }
+
+    // Check username exist
+    public boolean isUsernameExist(String username) {
+        return playerRepository.findByUsername(username) != null;
     }
 }

@@ -2,6 +2,7 @@ package com.example.scam_machine.models;
 
 import com.example.scam_machine.enums.RoleEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +23,9 @@ public class Player implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotEmpty(message = "Username has not be empty")
     private String username;
+    @NotEmpty(message = "Password has not be empty")
     private String password;
     private Double balance;
     @Transient

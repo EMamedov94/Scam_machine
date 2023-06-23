@@ -29,7 +29,9 @@ public class WebSecurityConfig {
                 ).permitAll())
                 .authorizeHttpRequests(request -> request.requestMatchers(
                         "/spin",
-                        "/gamePage"
+                        "/gamePage",
+                        "/profile",
+                        "/cashInBalance"
                 ).hasAuthority("ROLE_USER"))
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

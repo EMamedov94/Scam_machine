@@ -3,6 +3,7 @@ package com.example.scam_machine.controller;
 import com.example.scam_machine.service.SlotMachineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +24,7 @@ public class MachineController {
         }
         return ResponseEntity
                 .status(HttpStatus.OK)
+                .headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_JSON))
                 .body(machineService.spin(player));
     }
 }
