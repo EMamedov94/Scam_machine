@@ -7,24 +7,18 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "https://localhost:4200/")
 public class PageController {
     private final PageService pageService;
 
-    // Show welcome page
-    @GetMapping("/")
-    public ResponseEntity<String> index() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body("Welcome");
-    }
-
     // Show default slots game page
-    @GetMapping("/gamePage")
+    @GetMapping("/")
     public ResponseEntity<Object> showGamePage() {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -35,6 +29,9 @@ public class PageController {
     // Show player profile
     @GetMapping("/profile")
     public ResponseEntity<Object> showProfilePage(@AuthenticationPrincipal UserDetails player) {
+        if (player == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_JSON))

@@ -25,11 +25,12 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(request -> request.requestMatchers(
                         "/",
                         "/login",
-                        "/registration"
+                        "/registration",
+                        "/spin",
+                        "/getCurrentUser"
                 ).permitAll())
                 .authorizeHttpRequests(request -> request.requestMatchers(
-                        "/spin",
-                        "/gamePage",
+//                        "/spin",
                         "/profile",
                         "/cashInBalance"
                 ).hasAuthority("ROLE_USER"))
