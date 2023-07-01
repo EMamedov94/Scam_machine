@@ -19,14 +19,7 @@ public class PageService {
 
     // Show default play slots
     public List<Symbol> showDefaultPlaySlots() {
-        var symbolsDb = slotsRepository.getReferenceById(1L).getSymbolList();
-
-        Random random = new Random();
-        return List.of(
-                symbolsDb.get(random.nextInt(5) + 1),
-                symbolsDb.get(random.nextInt(5) + 1),
-                symbolsDb.get(random.nextInt(5) + 1)
-        );
+        return slotsRepository.getReferenceById(1L).getSymbolList();
     }
 
     // Show profile page

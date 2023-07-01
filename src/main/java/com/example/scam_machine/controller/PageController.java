@@ -18,7 +18,7 @@ public class PageController {
     private final PageService pageService;
 
     // Show default slots game page
-    @GetMapping("/")
+    @GetMapping("/showDefaultSlots")
     public ResponseEntity<Object> showGamePage() {
         return ResponseEntity
                 .status(HttpStatus.OK)
