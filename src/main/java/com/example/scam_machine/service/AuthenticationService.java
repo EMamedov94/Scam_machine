@@ -54,6 +54,6 @@ public class AuthenticationService {
 
     // Check username exist
     public boolean isUsernameExist(String username) {
-        return playerRepository.findByUsername(username) != null;
+        return playerRepository.existsByUsername(username);
     }
 }
